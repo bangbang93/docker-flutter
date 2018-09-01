@@ -1,14 +1,14 @@
 FROM centos
 
 # init
-RUN yum install -y java wget unzip which libstdc++ \
+RUN yum install -y java wget unzip which libstdc++ libstdc++.i686 \
  && yum groupinstall -y "Development Tools"
 
 # install android sdk
 ENV ANDROID_HOME /opt/android-sdk-linux
+ENV ANDROID_SDK_TOOLS_VERSION 4333796
 
-RUN export ANDROID_SDK_TOOLS_VERSION=4333796 \
- && cd /opt \
+RUN cd /opt \
  && wget -q https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_TOOLS_VERSION.zip -O android-sdk-tools.zip \
  && unzip -q android-sdk-tools.zip -d ${ANDROID_HOME} \
  && rm android-sdk-tools.zip \
@@ -19,6 +19,14 @@ RUN export ANDROID_SDK_TOOLS_VERSION=4333796 \
  && sdkmanager emulator
 
 ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+
+# android sdk 27
+ENV ANDROID_PLATFORM_VERSION 27
+ENV ANDROID_BUILD_TOOLS_VERSION 27.0.3
+
+RUN yes | sdkmanager \
+    "platforms;android-$ANDROID_PLATFORM_VERSION" \
+    "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
 
 # install flutter
 ENV FLUTTER_HOME=/opt/flutter
