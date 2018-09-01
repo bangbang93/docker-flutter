@@ -13,14 +13,16 @@ RUN export ANDROID_HOME=/opt/android-sdk-linux \
  && yes | sdkmanager --licenses \
  && sdkmanager tools \
  && sdkmanager platform-tools \
- && sdkmanager emulator \
- && echo PATH=$PATH >> ~/.bashrc \
- && echo ANDROID_HOME=$ANDROID_HOME >> ~/.bashrc
+ && sdkmanager emulator
+
+ENV PATH=$PATH \
+    ANDROID_HOME=$ANDROID_HOME
 
 
 RUN export FLUTTER_HOME=${HOME}/sdks/flutter \
  && git clone https://github.com/flutter/flutter.git ${FLUTTER_HOME} \
  && ln -s ${FLUTTER_HOME}/bin/flutter /usr/local/bin/flutter \
- && flutter doctor \
- && export PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin \
- && export GRADLE_OPTS=-Dorg.gradle.daemon=false 
+ && flutter doctor
+
+ENV PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin \
+    GRADLE_OPTS=-Dorg.gradle.daemon=false 
