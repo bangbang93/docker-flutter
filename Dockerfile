@@ -1,7 +1,7 @@
 FROM centos
 
 # init
-RUN yum install -y java wget unzip which libstdc++ libstdc++.i686 \
+RUN yum install -y java java-devel wget unzip which libstdc++ libstdc++.i686 \
  && yum groupinstall -y "Development Tools"
 
 # install android sdk
@@ -36,4 +36,5 @@ RUN git clone https://github.com/flutter/flutter.git ${FLUTTER_HOME} \
  && flutter doctor
 
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin \
-    GRADLE_OPTS=-Dorg.gradle.daemon=false 
+    GRADLE_OPTS=-Dorg.gradle.daemon=false \
+    LANG=en_US.UTF8
