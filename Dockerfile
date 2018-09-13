@@ -2,7 +2,10 @@ FROM centos
 
 # init
 RUN yum install -y java java-devel wget unzip which libstdc++ libstdc++.i686 \
- && yum groupinstall -y "Development Tools"
+ && yum groupinstall -y "Development Tools" \
+ && yum install -y https://centos7.iuscommunity.org/ius-release.rpm \
+ && yum remove -y git perl-Git \
+ && yum install -y git2u
 
 # install android sdk
 ENV ANDROID_HOME /opt/android-sdk-linux
@@ -33,7 +36,8 @@ ENV FLUTTER_HOME=/opt/flutter
 
 RUN git clone https://github.com/flutter/flutter.git ${FLUTTER_HOME} \
  && ln -s ${FLUTTER_HOME}/bin/flutter /usr/local/bin/flutter \
- && flutter doctor
+ && flutter channel beta \
+ && flutter upgrade
 
 ENV PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin \
     GRADLE_OPTS=-Dorg.gradle.daemon=false \
